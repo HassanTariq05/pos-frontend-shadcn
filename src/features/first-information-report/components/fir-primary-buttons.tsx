@@ -1,14 +1,14 @@
-import { UserPlus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DateRangePicker } from '@/components/ui/date-range-picker'
-import { useAttachments } from './attachments-provider'
+import { useFir } from './fir-provider'
 
-export function AttachmentsPrimaryButtons() {
-  const { setOpen } = useAttachments()
+export function FirPrimaryButtons() {
+  const { setOpen } = useFir()
   return (
     <div className='flex gap-2'>
       <Button className='space-x-1' onClick={() => setOpen('add')}>
-        <span>Add Attachment</span> <UserPlus size={18} />
+        <span>Add FIR</span> <Plus size={18} />
       </Button>
       <DateRangePicker
         onUpdate={(values) => console.log(values)}

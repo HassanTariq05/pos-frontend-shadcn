@@ -28,6 +28,7 @@ import { Route as AuthenticatedStocksRouteRouteImport } from './routes/_authenti
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedProductsRouteRouteImport } from './routes/_authenticated/products/route'
 import { Route as AuthenticatedGeneralJournalRouteRouteImport } from './routes/_authenticated/general-journal/route'
+import { Route as AuthenticatedFirstInformationReportRouteRouteImport } from './routes/_authenticated/first-information-report/route'
 import { Route as AuthenticatedChequesRouteRouteImport } from './routes/_authenticated/cheques/route'
 import { Route as AuthenticatedCashbookRouteRouteImport } from './routes/_authenticated/cashbook/route'
 import { Route as AuthenticatedBusinessAccountsRouteRouteImport } from './routes/_authenticated/business-accounts/route'
@@ -143,6 +144,12 @@ const AuthenticatedGeneralJournalRouteRoute =
     path: '/general-journal',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedFirstInformationReportRouteRoute =
+  AuthenticatedFirstInformationReportRouteRouteImport.update({
+    id: '/first-information-report',
+    path: '/first-information-report',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedChequesRouteRoute =
   AuthenticatedChequesRouteRouteImport.update({
     id: '/cheques',
@@ -252,6 +259,7 @@ export interface FileRoutesByFullPath {
   '/business-accounts': typeof AuthenticatedBusinessAccountsRouteRoute
   '/cashbook': typeof AuthenticatedCashbookRouteRoute
   '/cheques': typeof AuthenticatedChequesRouteRoute
+  '/first-information-report': typeof AuthenticatedFirstInformationReportRouteRoute
   '/general-journal': typeof AuthenticatedGeneralJournalRouteRoute
   '/products': typeof AuthenticatedProductsRouteRoute
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
@@ -288,6 +296,7 @@ export interface FileRoutesByTo {
   '/business-accounts': typeof AuthenticatedBusinessAccountsRouteRoute
   '/cashbook': typeof AuthenticatedCashbookRouteRoute
   '/cheques': typeof AuthenticatedChequesRouteRoute
+  '/first-information-report': typeof AuthenticatedFirstInformationReportRouteRoute
   '/general-journal': typeof AuthenticatedGeneralJournalRouteRoute
   '/products': typeof AuthenticatedProductsRouteRoute
   '/stocks': typeof AuthenticatedStocksRouteRoute
@@ -325,6 +334,7 @@ export interface FileRoutesById {
   '/_authenticated/business-accounts': typeof AuthenticatedBusinessAccountsRouteRoute
   '/_authenticated/cashbook': typeof AuthenticatedCashbookRouteRoute
   '/_authenticated/cheques': typeof AuthenticatedChequesRouteRoute
+  '/_authenticated/first-information-report': typeof AuthenticatedFirstInformationReportRouteRoute
   '/_authenticated/general-journal': typeof AuthenticatedGeneralJournalRouteRoute
   '/_authenticated/products': typeof AuthenticatedProductsRouteRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
@@ -365,6 +375,7 @@ export interface FileRouteTypes {
     | '/business-accounts'
     | '/cashbook'
     | '/cheques'
+    | '/first-information-report'
     | '/general-journal'
     | '/products'
     | '/settings'
@@ -401,6 +412,7 @@ export interface FileRouteTypes {
     | '/business-accounts'
     | '/cashbook'
     | '/cheques'
+    | '/first-information-report'
     | '/general-journal'
     | '/products'
     | '/stocks'
@@ -437,6 +449,7 @@ export interface FileRouteTypes {
     | '/_authenticated/business-accounts'
     | '/_authenticated/cashbook'
     | '/_authenticated/cheques'
+    | '/_authenticated/first-information-report'
     | '/_authenticated/general-journal'
     | '/_authenticated/products'
     | '/_authenticated/settings'
@@ -620,6 +633,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedGeneralJournalRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/first-information-report': {
+      id: '/_authenticated/first-information-report'
+      path: '/first-information-report'
+      fullPath: '/first-information-report'
+      preLoaderRoute: typeof AuthenticatedFirstInformationReportRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/cheques': {
       id: '/_authenticated/cheques'
       path: '/cheques'
@@ -777,6 +797,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBusinessAccountsRouteRoute: typeof AuthenticatedBusinessAccountsRouteRoute
   AuthenticatedCashbookRouteRoute: typeof AuthenticatedCashbookRouteRoute
   AuthenticatedChequesRouteRoute: typeof AuthenticatedChequesRouteRoute
+  AuthenticatedFirstInformationReportRouteRoute: typeof AuthenticatedFirstInformationReportRouteRoute
   AuthenticatedGeneralJournalRouteRoute: typeof AuthenticatedGeneralJournalRouteRoute
   AuthenticatedProductsRouteRoute: typeof AuthenticatedProductsRouteRoute
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
@@ -796,6 +817,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedBusinessAccountsRouteRoute,
   AuthenticatedCashbookRouteRoute: AuthenticatedCashbookRouteRoute,
   AuthenticatedChequesRouteRoute: AuthenticatedChequesRouteRoute,
+  AuthenticatedFirstInformationReportRouteRoute:
+    AuthenticatedFirstInformationReportRouteRoute,
   AuthenticatedGeneralJournalRouteRoute: AuthenticatedGeneralJournalRouteRoute,
   AuthenticatedProductsRouteRoute: AuthenticatedProductsRouteRoute,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
