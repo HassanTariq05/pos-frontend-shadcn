@@ -26,6 +26,7 @@ import { Route as ClerkAuthenticatedRouteRouteImport } from './routes/clerk/_aut
 import { Route as ClerkauthRouteRouteImport } from './routes/clerk/(auth)/route'
 import { Route as AuthenticatedStocksRouteRouteImport } from './routes/_authenticated/stocks/route'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
+import { Route as AuthenticatedPurchasesRouteRouteImport } from './routes/_authenticated/purchases/route'
 import { Route as AuthenticatedProductsRouteRouteImport } from './routes/_authenticated/products/route'
 import { Route as AuthenticatedGeneralJournalRouteRouteImport } from './routes/_authenticated/general-journal/route'
 import { Route as AuthenticatedFirstInformationReportRouteRouteImport } from './routes/_authenticated/first-information-report/route'
@@ -47,6 +48,7 @@ import { Route as AuthenticatedSettingsDisplayRouteImport } from './routes/_auth
 import { Route as AuthenticatedSettingsAppearanceRouteImport } from './routes/_authenticated/settings/appearance'
 import { Route as AuthenticatedSettingsAccountRouteImport } from './routes/_authenticated/settings/account'
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
+import { Route as AuthenticatedPrintPurchasePurchaseIdRouteRouteImport } from './routes/_authenticated/print-purchase/$purchaseId/route'
 
 const ClerkRouteRoute = ClerkRouteRouteImport.update({
   id: '/clerk',
@@ -130,6 +132,12 @@ const AuthenticatedSettingsRouteRoute =
   AuthenticatedSettingsRouteRouteImport.update({
     id: '/settings',
     path: '/settings',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPurchasesRouteRoute =
+  AuthenticatedPurchasesRouteRouteImport.update({
+    id: '/purchases',
+    path: '/purchases',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedProductsRouteRoute =
@@ -252,6 +260,12 @@ const AuthenticatedErrorsErrorRoute =
     path: '/errors/$error',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPrintPurchasePurchaseIdRouteRoute =
+  AuthenticatedPrintPurchasePurchaseIdRouteRouteImport.update({
+    id: '/print-purchase/$purchaseId',
+    path: '/print-purchase/$purchaseId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/clerk': typeof ClerkAuthenticatedRouteRouteWithChildren
@@ -262,6 +276,7 @@ export interface FileRoutesByFullPath {
   '/first-information-report': typeof AuthenticatedFirstInformationReportRouteRoute
   '/general-journal': typeof AuthenticatedGeneralJournalRouteRoute
   '/products': typeof AuthenticatedProductsRouteRoute
+  '/purchases': typeof AuthenticatedPurchasesRouteRoute
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/stocks': typeof AuthenticatedStocksRouteRoute
   '/forgot-password': typeof authForgotPasswordRoute
@@ -275,6 +290,7 @@ export interface FileRoutesByFullPath {
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/': typeof AuthenticatedIndexRoute
+  '/print-purchase/$purchaseId': typeof AuthenticatedPrintPurchasePurchaseIdRouteRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
@@ -299,6 +315,7 @@ export interface FileRoutesByTo {
   '/first-information-report': typeof AuthenticatedFirstInformationReportRouteRoute
   '/general-journal': typeof AuthenticatedGeneralJournalRouteRoute
   '/products': typeof AuthenticatedProductsRouteRoute
+  '/purchases': typeof AuthenticatedPurchasesRouteRoute
   '/stocks': typeof AuthenticatedStocksRouteRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/otp': typeof authOtpRoute
@@ -311,6 +328,7 @@ export interface FileRoutesByTo {
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/': typeof AuthenticatedIndexRoute
+  '/print-purchase/$purchaseId': typeof AuthenticatedPrintPurchasePurchaseIdRouteRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
@@ -337,6 +355,7 @@ export interface FileRoutesById {
   '/_authenticated/first-information-report': typeof AuthenticatedFirstInformationReportRouteRoute
   '/_authenticated/general-journal': typeof AuthenticatedGeneralJournalRouteRoute
   '/_authenticated/products': typeof AuthenticatedProductsRouteRoute
+  '/_authenticated/purchases': typeof AuthenticatedPurchasesRouteRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/stocks': typeof AuthenticatedStocksRouteRoute
   '/clerk/(auth)': typeof ClerkauthRouteRouteWithChildren
@@ -352,6 +371,7 @@ export interface FileRoutesById {
   '/(errors)/500': typeof errors500Route
   '/(errors)/503': typeof errors503Route
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/print-purchase/$purchaseId': typeof AuthenticatedPrintPurchasePurchaseIdRouteRoute
   '/_authenticated/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
@@ -378,6 +398,7 @@ export interface FileRouteTypes {
     | '/first-information-report'
     | '/general-journal'
     | '/products'
+    | '/purchases'
     | '/settings'
     | '/stocks'
     | '/forgot-password'
@@ -391,6 +412,7 @@ export interface FileRouteTypes {
     | '/500'
     | '/503'
     | '/'
+    | '/print-purchase/$purchaseId'
     | '/errors/$error'
     | '/settings/account'
     | '/settings/appearance'
@@ -415,6 +437,7 @@ export interface FileRouteTypes {
     | '/first-information-report'
     | '/general-journal'
     | '/products'
+    | '/purchases'
     | '/stocks'
     | '/forgot-password'
     | '/otp'
@@ -427,6 +450,7 @@ export interface FileRouteTypes {
     | '/500'
     | '/503'
     | '/'
+    | '/print-purchase/$purchaseId'
     | '/errors/$error'
     | '/settings/account'
     | '/settings/appearance'
@@ -452,6 +476,7 @@ export interface FileRouteTypes {
     | '/_authenticated/first-information-report'
     | '/_authenticated/general-journal'
     | '/_authenticated/products'
+    | '/_authenticated/purchases'
     | '/_authenticated/settings'
     | '/_authenticated/stocks'
     | '/clerk/(auth)'
@@ -467,6 +492,7 @@ export interface FileRouteTypes {
     | '/(errors)/500'
     | '/(errors)/503'
     | '/_authenticated/'
+    | '/_authenticated/print-purchase/$purchaseId'
     | '/_authenticated/errors/$error'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/appearance'
@@ -619,6 +645,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/purchases': {
+      id: '/_authenticated/purchases'
+      path: '/purchases'
+      fullPath: '/purchases'
+      preLoaderRoute: typeof AuthenticatedPurchasesRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/products': {
       id: '/_authenticated/products'
       path: '/products'
@@ -766,6 +799,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedErrorsErrorRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/print-purchase/$purchaseId': {
+      id: '/_authenticated/print-purchase/$purchaseId'
+      path: '/print-purchase/$purchaseId'
+      fullPath: '/print-purchase/$purchaseId'
+      preLoaderRoute: typeof AuthenticatedPrintPurchasePurchaseIdRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -800,9 +840,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFirstInformationReportRouteRoute: typeof AuthenticatedFirstInformationReportRouteRoute
   AuthenticatedGeneralJournalRouteRoute: typeof AuthenticatedGeneralJournalRouteRoute
   AuthenticatedProductsRouteRoute: typeof AuthenticatedProductsRouteRoute
+  AuthenticatedPurchasesRouteRoute: typeof AuthenticatedPurchasesRouteRoute
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedStocksRouteRoute: typeof AuthenticatedStocksRouteRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedPrintPurchasePurchaseIdRouteRoute: typeof AuthenticatedPrintPurchasePurchaseIdRouteRoute
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
   AuthenticatedAppsIndexRoute: typeof AuthenticatedAppsIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
@@ -821,9 +863,12 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedFirstInformationReportRouteRoute,
   AuthenticatedGeneralJournalRouteRoute: AuthenticatedGeneralJournalRouteRoute,
   AuthenticatedProductsRouteRoute: AuthenticatedProductsRouteRoute,
+  AuthenticatedPurchasesRouteRoute: AuthenticatedPurchasesRouteRoute,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedStocksRouteRoute: AuthenticatedStocksRouteRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedPrintPurchasePurchaseIdRouteRoute:
+    AuthenticatedPrintPurchasePurchaseIdRouteRoute,
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,
   AuthenticatedAppsIndexRoute: AuthenticatedAppsIndexRoute,
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,

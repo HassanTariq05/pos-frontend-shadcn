@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   type SortingState,
   type VisibilityState,
@@ -14,6 +14,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { Printer } from 'lucide-react'
+import { useReactToPrint } from 'react-to-print'
 import { cn, formatCurrency } from '@/lib/utils'
 import { type NavigateFn, useTableUrlState } from '@/hooks/use-table-url-state'
 import { Button } from '@/components/ui/button'
@@ -37,7 +38,20 @@ type DataTableProps = {
 }
 
 export function CashbookTable({ data, search, navigate }: DataTableProps) {
-  const [isPrinting, setIsPrinting] = useState(false)
+  const componentRef = useRef<HTMLDivElement>(null)
+
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef,
+    documentTitle: 'Cashbook Report',
+    pageStyle: `
+      @page { size: A4 portrait; margin: 12mm; }
+      @media print {
+        body { font-family: sans-serif; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #000 !important; padding: 6px 8px !important; }
+      }
+    `,
+  } as any)
 
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -108,15 +122,8 @@ export function CashbookTable({ data, search, navigate }: DataTableProps) {
         <Button
           variant='outline'
           size='sm'
-          className='mr-2 gap-1'
-          onClick={() => {
-            setIsPrinting(true)
-
-            requestAnimationFrame(() => {
-              window.print()
-              setIsPrinting(false)
-            })
-          }}
+          className='mr-2 gap-1 print:hidden'
+          onClick={handlePrint}
         >
           <Printer size={18} />
           <span>Print</span>
@@ -210,17 +217,15 @@ export function CashbookTable({ data, search, navigate }: DataTableProps) {
         </Table>
       </div>
 
-      {isPrinting && (
-        <div className='print-only'>
-          <CashbookPrintView
-            table={table}
-            companyName='ABC Traders'
-            openingBalance={125000}
-            title='Cashbook'
-            subtitle='Debit / Credit Summary'
-          />
-        </div>
-      )}
+      <div ref={componentRef} className='hidden print:block'>
+        <CashbookPrintView
+          table={table}
+          companyName='ABC Traders'
+          openingBalance={125000}
+          title='Cashbook'
+          subtitle='Debit / Credit Summary'
+        />
+      </div>
     </div>
   )
 }

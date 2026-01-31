@@ -1,6 +1,4 @@
-'use client'
-
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   type SortingState,
   type VisibilityState,
@@ -13,11 +11,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { Printer } from 'lucide-react'
-import { useReactToPrint } from 'react-to-print'
 import { cn } from '@/lib/utils'
 import { type NavigateFn, useTableUrlState } from '@/hooks/use-table-url-state'
-import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -27,35 +22,30 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { DataTablePagination, DataTableToolbar } from '@/components/data-table'
-import { JournalPrintView } from '@/components/print/general-journal-print'
-import { journalColumns as columns } from './journal-columns'
+import { townssData } from '@/features/business-accounts/data/accounts-mock-data'
+import { type Purchase } from '../data/schema'
+import { purchasesColumns as columns } from './purchases-columns'
 
 type DataTableProps = {
-  data: any[]
+  data: Purchase[]
   search: Record<string, unknown>
   navigate: NavigateFn
 }
 
-export function JournalTable({ data, search, navigate }: DataTableProps) {
-  const componentRef = useRef<HTMLDivElement>(null)
-
-  const handlePrint = useReactToPrint({
-    contentRef: componentRef,
-    documentTitle: 'General Journal Report',
-    pageStyle: `
-        @page { size: A4 portrait; margin: 12mm; }
-        @media print {
-          body { font-family: sans-serif; }
-          table { width: 100%; border-collapse: collapse; }
-          th, td { border: 1px solid #000 !important; padding: 6px 8px !important; }
-        }
-      `,
-  } as any)
-
+export function PurchasesTable({ data, search, navigate }: DataTableProps) {
+  // Local UI-only states
   const [rowSelection, setRowSelection] = useState({})
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    document: false,
+    town: false,
+  })
   const [sorting, setSorting] = useState<SortingState>([])
 
+  // Local state management for table (uncomment to use local-only state, not synced with URL)
+  // const [columnFilters, onColumnFiltersChange] = useState<ColumnFiltersState>([])
+  // const [pagination, onPaginationChange] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 })
+
+  // Synced with URL states (keys/defaults mirror purchases route search schema)
   const {
     columnFilters,
     onColumnFiltersChange,
@@ -67,6 +57,12 @@ export function JournalTable({ data, search, navigate }: DataTableProps) {
     navigate,
     pagination: { defaultPage: 1, defaultPageSize: 10 },
     globalFilter: { enabled: false },
+    columnFilters: [
+      // purchasename per-column text filter
+      { columnId: 'purchasename', searchKey: 'purchasename', type: 'string' },
+      { columnId: 'status', searchKey: 'status', type: 'array' },
+      { columnId: 'role', searchKey: 'role', type: 'array' },
+    ],
   })
 
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -101,60 +97,79 @@ export function JournalTable({ data, search, navigate }: DataTableProps) {
   return (
     <div
       className={cn(
-        'max-sm:has-[div[role="toolbar"]]:mb-16',
+        'max-sm:has-[div[role="toolbar"]]:mb-16', // Add margin bottom to the table on mobile when the toolbar is visible
         'flex flex-1 flex-col gap-4'
       )}
     >
       <DataTableToolbar
         table={table}
-        searchPlaceholder='Filter records...'
-        searchKey='description'
-      >
-        <Button
-          variant='outline'
-          size='sm'
-          className='mr-2 gap-1 print:hidden'
-          onClick={handlePrint}
-        >
-          <Printer size={18} />
-          <span>Print</span>
-        </Button>
-      </DataTableToolbar>
+        searchPlaceholder='Filter purchases...'
+        searchKey='purchaseName'
+        filters={[
+          {
+            columnId: 'document',
+            title: 'Document',
+            options: [
+              { label: 'Yes', value: 'yes' },
+              { label: 'No', value: 'no' },
+            ],
+          },
 
+          {
+            columnId: 'town',
+            title: 'Town',
+            options: [
+              ...townssData.map((town) => {
+                return {
+                  label: town.title,
+                  value: town.id,
+                }
+              }),
+            ],
+          },
+        ]}
+      />
       <div className='overflow-hidden rounded-md border'>
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((hg) => (
-              <TableRow key={hg.id}>
-                {hg.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    className={cn(
-                      header.column.columnDef.meta?.className,
-                      header.column.columnDef.meta?.thClassName
-                    )}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                ))}
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id} className='group/row'>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className={cn(
+                        'bg-background group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
+                        header.column.columnDef.meta?.className,
+                        header.column.columnDef.meta?.thClassName
+                      )}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  )
+                })}
               </TableRow>
             ))}
           </TableHeader>
-
           <TableBody>
-            {table.getRowModel().rows.length ? (
+            {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  className='group/row'
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
                       className={cn(
+                        'bg-background group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
                         cell.column.columnDef.meta?.className,
                         cell.column.columnDef.meta?.tdClassName
                       )}
@@ -179,16 +194,6 @@ export function JournalTable({ data, search, navigate }: DataTableProps) {
             )}
           </TableBody>
         </Table>
-      </div>
-
-      <div ref={componentRef} className='hidden print:block'>
-        <JournalPrintView
-          table={table}
-          companyName='ABC Traders'
-          openingBalance={125000}
-          title='Journal'
-          subtitle='Debit / Credit Summary'
-        />
       </div>
       <DataTablePagination table={table} className='mt-auto' />
     </div>

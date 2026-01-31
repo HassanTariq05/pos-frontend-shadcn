@@ -87,23 +87,34 @@
 }
 
 @media print {
-  body * {
-    visibility: hidden;
+  .print-only .card,
+  .print-only [class*='card'] {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    background-color: white !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
   }
 
-  .print-only,
-  .print-only * {
-    visibility: visible;
+  .print-only .card-header,
+  .print-only .card-content,
+  .print-only [class*='card-header'],
+  .print-only [class*='card-content'] {
+    background: transparent !important;
+    border: none !important;
+    padding: 0.5rem 0 !important;
+    margin: 0 !important;
   }
 
-  .print-only {
-    position: absolute;
-    inset: 0;
+  .print-only .card,
+  .print-only .card * {
+    color: black !important;
   }
-}
 
-@media screen {
-  .print-only {
-    display: none;
+  .print-only .card-title {
+    font-size: 1.5rem !important;
+    font-weight: bold !important;
+    margin-bottom: 1rem !important;
   }
 }

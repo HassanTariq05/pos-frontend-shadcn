@@ -29,6 +29,7 @@ type AttachmentsManagerProps = {
   onChange?: (attachments: AttachmentItem[]) => void
   maxFiles?: number
   accept?: string
+  disabled?: boolean
 }
 
 const isImage = (fileName: string) => /\.(png|jpg|jpeg|webp)$/i.test(fileName)
@@ -45,6 +46,7 @@ export const AttachmentsManager = forwardRef<
       onChange,
       maxFiles = 10,
       accept = 'image/*,.pdf,.doc,.docx,.xlsx,.xls',
+      disabled,
     },
     ref
   ) => {
@@ -203,24 +205,28 @@ export const AttachmentsManager = forwardRef<
                               <Download className='h-3.5 w-3.5' />
                             </Button>
                           )}
-                          <Button
-                            variant='ghost'
-                            size='icon'
-                            className='h-7 w-7 text-destructive hover:bg-destructive/10'
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              removeAttachment(index)
-                            }}
-                          >
-                            <Trash2 className='h-3.5 w-3.5' />
-                          </Button>
+
+                          {!disabled && (
+                            <Button
+                              variant='ghost'
+                              size='icon'
+                              className='h-7 w-7 text-destructive hover:bg-destructive/10'
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                removeAttachment(index)
+                              }}
+                            >
+                              <Trash2 className='h-3.5 w-3.5' />
+                            </Button>
+                          )}
                         </div>
                       </div>
 
                       <div className='mt-2'>
                         <Input
+                          disabled={disabled}
                           placeholder='Add note (optional)...'
-                          className='h-8 border-border bg-background text-xs'
+                          className='h-8 border-border bg-background text-xs disabled:bg-background disabled:text-foreground disabled:opacity-100'
                           value={attachment.note ?? ''}
                           onChange={(e) => updateNote(index, e.target.value)}
                         />
@@ -229,8 +235,9 @@ export const AttachmentsManager = forwardRef<
                       <div className='mt-2'>
                         <Input
                           type='date'
+                          disabled={disabled}
                           placeholder='Document date'
-                          className='h-8 text-xs'
+                          className='h-8 text-xs disabled:bg-background disabled:text-foreground disabled:opacity-100'
                           value={
                             attachment.documentDate
                               ? format(attachment.documentDate, 'yyyy-MM-dd')
@@ -267,20 +274,22 @@ export const AttachmentsManager = forwardRef<
               }}
             />
 
-            <Button
-              type='button'
-              variant='outline'
-              size='sm'
-              className='w-full justify-start gap-2 border-dashed hover:border-primary hover:bg-primary/5'
-              onClick={() => fileInputRef.current?.click()}
-              disabled={attachments.length >= maxFiles}
-            >
-              <PlusCircle className='h-4 w-4 shrink-0' />
-              <span className='text-xs font-medium'>Add Attachment(s)</span>
-              <span className='ml-auto text-xs text-muted-foreground'>
-                (max {maxFiles})
-              </span>
-            </Button>
+            {!disabled && (
+              <Button
+                type='button'
+                variant='outline'
+                size='sm'
+                className='w-full justify-start gap-2 border-dashed hover:border-primary hover:bg-primary/5'
+                onClick={() => fileInputRef.current?.click()}
+                disabled={attachments.length >= maxFiles}
+              >
+                <PlusCircle className='h-4 w-4 shrink-0' />
+                <span className='text-xs font-medium'>Add Attachment(s)</span>
+                <span className='ml-auto text-xs text-muted-foreground'>
+                  (max {maxFiles})
+                </span>
+              </Button>
+            )}
           </div>
         </div>
       </div>
